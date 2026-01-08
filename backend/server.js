@@ -11,6 +11,7 @@ app.get("/",(req,res)=>{
     res.send("MediIndia API is running");
 })
 
+
 connectDb();
 
 const PORT = process.env.PORT || 5000;
