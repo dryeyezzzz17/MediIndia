@@ -11,6 +11,7 @@ app.get("/",(req,res)=>{
     res.send("MediIndia API is running");
 })
 
+app.use("/api/auth", require("./routes/authRoutes"));
 
 connectDb();
 
