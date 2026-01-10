@@ -2,6 +2,8 @@ const express=require("express");
 const cors=require("cors");
 require("dotenv").config();
 const connectDb=require("./config/db");
+require("./models/Treatment");
+require("./models/Hospital");
 
 const app=express();
 app.use(cors());
@@ -13,6 +15,8 @@ app.get("/",(req,res)=>{
 
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
+app.use("/api/hospitals", require("./routes/hospitalRoutes"));
+
 
 
 connectDb();
