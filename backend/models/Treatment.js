@@ -13,7 +13,7 @@ const treatmentSchema=new mongoose.Schema({
     category:{
         type: String,
         required: true,
-      enum: [
+    enum: [
         "Cardiology",
         "Orthopedics",
         "Neurology",
