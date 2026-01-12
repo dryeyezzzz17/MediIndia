@@ -56,8 +56,17 @@ exports.updateHospital = async (req,res) => {
 
 exports.deleteHospital=async (req,res)=>{
     try{
-        await Hospital.findByIdAndUpdate(req.params.id, { isActive: false });
-        res.json({ message: "Hospital deactivated" });
+        const hospital = await Hospital.findByIdAndUpdate(
+            { _id: req.params.id },
+            { isActive: false },
+            { new: true }
+        );
+
+        if (!hospital) {
+            return res.status(404).json({ message: "Hospital not found" });
+        }
+
+        res.json({ message: "Hospital deactivated successfully" });
     }catch(error){
         res.status(500).json({ message: error.message });
     }
