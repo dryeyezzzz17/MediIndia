@@ -24,9 +24,9 @@ const treatmentSchema=new mongoose.Schema({
         "General",
       ],
     },
-    estimatedcost:{
-        min:{type:String},
-        max:{type:String}
+    estimatedCostUSD: {
+      min: { type: Number, required: true },
+      max: { type: Number, required: true },
     },
     successrate:{
         type:String

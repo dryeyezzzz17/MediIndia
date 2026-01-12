@@ -17,6 +17,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/hospitals", require("./routes/hospitalRoutes"));
 app.use("/api/doctors", require("./routes/doctorRoutes"));
+app.use("/api/treatments",require("./routes/treatmentRoutes"));
 
 connectDb();
 
