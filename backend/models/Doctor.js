@@ -6,7 +6,7 @@ const doctorSchema=new mongoose.Schema({
         trim:true
     },
     experience:{
-        type:String
+        type:Number
     },
     specialization: {
       type: String,

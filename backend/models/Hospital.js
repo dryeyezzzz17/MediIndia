@@ -9,6 +9,9 @@ const hospitalSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    country:{
+         type: String, default: "India" 
+    },
     contactPhone:{
         type:String,
     },
@@ -23,11 +26,11 @@ const hospitalSchema=new mongoose.Schema({
     },
     accreditation:String,
     description:String,
-    treatmentsOffered:[
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Treatment",
-        }
-    ]
 },{timestamps:true});
+
+hospitalSchema.index(
+  { name: 1, city: 1 },
+  { unique: true }
+);
+
 module.exports=mongoose.model("Hospital",hospitalSchema);
