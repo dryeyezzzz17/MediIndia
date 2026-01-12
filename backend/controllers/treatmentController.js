@@ -50,10 +50,17 @@ exports.updateTreatment=async (req,res)=>{
 
 exports.deleteTreatment=async (req,res)=>{
     try{
-        await Treatment.findByIdAndDelete(req.params.id,{isActive:false});
-        res.json({
-            message:"Treatment deactivated successfully"
-        })
+        const treatment = await Treatment.findByIdAndUpdate(
+            {_id:req.params.id},
+            { isActive: false },
+            { new: true }
+        );
+
+        if (!treatment) {
+            return res.status(404).json({ message: "Treatment not found" });
+        }
+
+        res.json({ message: "Treatment deactivated successfully" });
     }catch(error){
         res.status(500).json({ message: error.message });
     }
