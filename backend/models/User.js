@@ -19,7 +19,7 @@ const userSchema=new mongoose.Schema({
     },
     role:{
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user", "admin","doctor","hospitalAdmin"],
         default: "user",
     },
     phone:{
@@ -30,9 +30,9 @@ const userSchema=new mongoose.Schema({
     },
     medicalhistory:{
         type:String,
-        required:true,
+        required:true
     },
-    avator:{
+    avatar:{
         type:String,
     }
 
