@@ -18,7 +18,7 @@ exports.createHospital=async (req,res)=>{
 
 exports.getAllHospitals=async (req,res)=>{
     try{
-        const hospitals=await Hospital.find({isActive:true}).populate("treatmentsOffered", "name category");
+        const hospitals=await Hospital.find({isActive:true});
         res.status(201).json({
             hospitals
         });
@@ -29,7 +29,7 @@ exports.getAllHospitals=async (req,res)=>{
 
 exports.getHospitalById =async (req,res)=>{
     try{
-        const hospital=await Hospital.findById(req.params.id).populate("treatmentsOffered");
+        const hospital=await Hospital.findById(req.params.id);
         if(!hospital){
             return res.status(404).json({ message: "Hospital not found" });
         }

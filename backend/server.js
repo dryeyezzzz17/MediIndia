@@ -18,6 +18,8 @@ app.use("/api/admin", require("./routes/adminRoutes"));
 app.use("/api/hospitals", require("./routes/hospitalRoutes"));
 app.use("/api/doctors", require("./routes/doctorRoutes"));
 app.use("/api/treatments",require("./routes/treatmentRoutes"));
+app.use("/api/hospital-treatments",require("./routes/hospitalTreatmentRoutes"));
+
 
 connectDb();
 

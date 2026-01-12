@@ -18,7 +18,7 @@ const generateToken = (user) => {
 //REGISTER
 exports.register = async (req, res) => {
   try {
-    const { name, email, password, phone, country,medicalhistory } = req.body;
+    const { name, email, password, phone, country,medicalhistory,role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -42,7 +42,8 @@ exports.register = async (req, res) => {
       password: hashedPassword,
       phone,
       country,
-      medicalhistory
+      medicalhistory,
+      role:role || "user"
     });
 
     return res.status(201).json({
