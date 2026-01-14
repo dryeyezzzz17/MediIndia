@@ -20,6 +20,7 @@ app.use("/api/doctors", require("./routes/doctorRoutes"));
 app.use("/api/treatments",require("./routes/treatmentRoutes"));
 app.use("/api/hospital-treatments",require("./routes/hospitalTreatmentRoutes"));
 app.use("/api/bookings", require("./routes/bookingRoutes"));
+app.use("/api/users",require("./routes/userRoutes"));
 
 
 
