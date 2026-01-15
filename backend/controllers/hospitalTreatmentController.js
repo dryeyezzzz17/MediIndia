@@ -3,10 +3,15 @@ const HospitalTreatment=require("../models/HospitalTreatment");
 exports.createHospitalTreatment=async (req,res)=>{
     try{
         const hospitalTreatment=await HospitalTreatment.create(req.body);
-        res.status(201).json(hospitalTreatment);
+        res.status(201).json({
+            success: true,
+            message: "Hospital treatment created successfully",
+            data: hospitalTreatment,
+        });
     }catch(error){
         res.status(400).json({
-            message:error.message
+            success: false,
+            message: "Failed to create hospital treatment",
         })
     }
 }
@@ -17,10 +22,15 @@ exports.getTreatmentsByHospital =async (req,res)=>{
             hospital:req.params.hospitalId,
             isActive:true,
         }).populate("treatment","name category description");
-        res.json(data);
-
+        res.status(200).json({
+            success: true,
+            data,
+        });
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success: false,
+            message: "Failed to fetch treatments for hospital",
+        });
     }
 }
 
@@ -30,10 +40,16 @@ exports.getHospitalsByTreatment  =async (req,res)=>{
             treatment:req.params.treatmentId,
             isActive:true,
         }).populate("hospital", "name city contactEmail contactPhone");
-        res.json(data);
+        res.status(200).json({
+            success: true,
+            data,
+        });
 
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success: false,
+            message: "Failed to fetch hospitals for treatment", 
+        });
     }
 }
 
@@ -46,14 +62,22 @@ exports.updateHospitalTreatment =async (req,res)=>{
         );
 
         if(!hospitalTreatment){
-            return res.status(400).json({
+            return res.status(404).json({
+                success:false,
                 message: "HospitalTreatment not found"
             })
         }
 
-        res.json(hospitalTreatment);
+        res.status(200).json({
+            success: true,
+            message: "Hospital treatment updated successfully",
+            data: hospitalTreatment,
+        });
     }catch(error){
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ 
+            success: false,
+            message: "Failed to update hospital treatment", 
+        });
     }
 }
 
@@ -67,13 +91,20 @@ exports.deleteHospitalTreatment  =async (req,res)=>{
 
         if(!hospitalTreatment){
             return res.status(400).json({
+                success:false,
                 message: "HospitalTreatment not found"
             })
         }
 
-        res.json({ message: "Hospital treatment deactivated successfully" });
+        res.status(200).json({ 
+            success:true,
+            message: "Hospital treatment deactivated successfully" 
+        });
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success: false,
+            message: "Failed to delete hospital treatment", 
+        });
     }
 }
 
