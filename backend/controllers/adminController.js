@@ -14,18 +14,24 @@ exports.getAdminStats=async (req,res)=>{
             Booking.countDocuments({status:"Approved"}),
             Booking.countDocuments({status:"Cancelled"}),
         ]);
-        res.json({
-            totalUsers,
-            totalHospitals,
-            totalTreatments,
-            totalBookings,
-            pendingBookings,
-            appraovedBookings,
-            cancelledBookings
+        res.status(200).json({
+            success:true,
+            data:{
+                totalUsers,
+                totalHospitals,
+                totalTreatments,
+                totalBookings,
+                bookingStatus:{
+                    pending:pendingBookings,
+                    approved:appraovedBookings,
+                    cancelled:cancelledBookings
+                },
+            },  
         })
     }catch(error){
         res.status(500).json({
-            message:error.message
+            success:false,
+            message:"Failed to get admin dashboard statistics",
         })
     }
 }
