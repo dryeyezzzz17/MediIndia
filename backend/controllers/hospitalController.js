@@ -18,7 +18,8 @@ exports.createHospital=async (req,res)=>{
 
 exports.getAllHospitals=async (req,res)=>{
     try{
-        const hospitals=await Hospital.find({isActive:true}).populate("treatmentsOffered", "name category");
+        const hospitals=await Hospital.find({isActive:true})
+        // .populate("treatmentsOffered", "name category");
 
         res.status(200).json({
             success:true,
