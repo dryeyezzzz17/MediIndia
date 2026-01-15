@@ -22,6 +22,7 @@ exports.register = async (req, res) => {
 
     if (!name || !email || !password) {
       return res.status(400).json({
+        success:false,
         message: "Required fields are missing",
       });
     }
@@ -29,6 +30,7 @@ exports.register = async (req, res) => {
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({
+        success:false,
         message: "User already exists",
       });
     }
@@ -46,11 +48,13 @@ exports.register = async (req, res) => {
     });
 
     return res.status(201).json({
+      success:true,
       message: "User registered successfully",
     });
   } catch (error) {
     return res.status(500).json({
-      message: error.message,
+      success:false,
+      message: "User registration failed.Try again!",
     });
   }
 };
@@ -62,6 +66,7 @@ exports.login = async (req, res) => {
 
     if (!email || !password) {
       return res.status(400).json({
+        success:false,
         message: "Email and password are required",
       });
     }
@@ -70,6 +75,7 @@ exports.login = async (req, res) => {
 
     if (!user) {
       return res.status(401).json({
+        success:false,
         message: "Invalid credentials",
       });
     }
@@ -77,25 +83,31 @@ exports.login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({
+        success:false,
         message: "Invalid credentials",
       });
     }
 
     const token = generateToken(user);
 
-    return res.json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        country: user.country,
+    return res.status(200).json({
+      success:true,
+      message:"Login successful",
+      data:{
+        token,
+        user:{
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          country: user.country,
+        },
       },
     });
   } catch (error) {
     return res.status(500).json({
-      message: error.message,
+      success:false,
+      message: "Login failed.Try again!",
     });
   }
 };
