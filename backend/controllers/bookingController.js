@@ -7,6 +7,7 @@ exports.createBooking=async (req,res)=>{
 
         if(!hospitalTreatment){
             return res.status(400).json({
+                success:false,
                 message:"HospitalTreatment is required"
             })
         }
@@ -17,6 +18,7 @@ exports.createBooking=async (req,res)=>{
         })
         if(!check){
             return res.status(400).json({
+                success:false,
                 message:"Invalid hospital treatment "
             })
         }
@@ -28,6 +30,7 @@ exports.createBooking=async (req,res)=>{
 
         if (existingBooking) {
             return res.status(400).json({
+                success:false,
                 message:
                 "You already have a pending booking for this treatment at this hospital",
             });
@@ -38,9 +41,16 @@ exports.createBooking=async (req,res)=>{
             preferredDate,
             medicalNotes,
         })
-        res.status(201).json(booking);
+        res.status(201).json({
+            success:true,
+            message:"Booking created successfully",
+            data:booking
+        });
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success:false,
+            message: "Failed to create booking.Try again!" 
+        });
     }
 }
 
@@ -54,9 +64,15 @@ exports.getMyBookings=async (req,res)=>{
                 {path:"treatment",select:"name category"},
             ],
         }).sort({createdAt:-1});
-        res.json(bookings);
+        res.status(200).json({
+            success:true,
+            data:bookings
+        });
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success:false,
+            message: "Failed to fetch booking details." 
+        });
     }
 }
 
@@ -72,9 +88,16 @@ exports.getAllBookings=async (req,res)=>{
                 {path:"treatment",select:"name"},
             ],
         }).sort({createdAt:-1});
-        return res.status(200).json(bookings); 
+
+        res.status(200).json({
+            success:true,
+            data:bookings
+        }); 
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success:false,
+            message: "Failed to fetch all bookings"
+        });
     }
 }
 
@@ -82,7 +105,10 @@ exports.updateBookingStatus=async (req,res)=>{
     try{
         const {status}=req.body;
         if(!["Pending","Approved","Rejected"].includes(status)){
-            return res.status(400).json({ message: "Invalid status value" });
+            return res.status(400).json({
+                success:false,
+                message: "Invalid status value" 
+            });
         }
 
         const booking=await Booking.findByIdAndUpdate(
@@ -91,11 +117,21 @@ exports.updateBookingStatus=async (req,res)=>{
             {new:true}
         );
         if(!booking){
-            return res.status(404).json({ message: "Booking not found" });
+            return res.status(404).json({
+                success:false,
+                message: "Booking not found" 
+            });
         }
-        res.json(booking);
+        res.status(200).json({
+            success:true,
+            data:booking,
+            message:"Booking status updated successfully"
+        })
     }catch(error){
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success:false,
+            message: "Failed to update booking status"
+        });
     }
 }
 
@@ -104,24 +140,37 @@ exports.cancelBooking = async (req, res) => {
         const booking = await Booking.findById(req.params.id);
 
         if(!booking){
-        return res.status(404).json({ message: "Booking not found" });
+            return res.status(404).json({ 
+                success:false,  
+                message: "Booking not found" 
+            });
         }
 
         if(booking.user.toString() !== req.user.id){
-        return res.status(403).json({ message: "Not authorized" });
+            return res.status(403).json({ 
+                success:false,
+                message: "Not authorized to cancel this booking" 
+            });
         }
 
         if (booking.status !== "Pending") {
-        return res.status(400).json({
-            message: "Only pending bookings can be cancelled",
-        });
+            return res.status(400).json({
+                success:false,
+                message: "Only pending bookings can be cancelled",
+            });
         }
 
         booking.status = "Cancelled";
         await booking.save();
 
-        res.json({ message: "Booking cancelled successfully" });
+        res.status(200).json({ 
+            success:true,
+            message: "Booking cancelled successfully" 
+        });
     }catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ 
+            success:false,
+            message: "Failed to cancel booking" 
+        });
     }
 };
