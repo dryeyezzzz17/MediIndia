@@ -31,4 +31,10 @@ const doctorSchema=new mongoose.Schema({
       default: true,
     },
 },{timestamps:true});
+
+doctorSchema.index(
+    { name: 1, hospital: 1 },
+    { unique: true }
+);
+
 module.exports=mongoose.model("Doctor",doctorSchema);
